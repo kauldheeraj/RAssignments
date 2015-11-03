@@ -3,7 +3,7 @@ rankall <- function (outcome, num="best"){
   strValidOutcome = c("heart failure","heart attack","pneumonia")
   
   outIndex <- NULL
-  dfOut <- data.frame(hospital=character(), state = character())
+  dfOut <- data.frame(hospital=factor(), state=factor())
   if (outcome =="heart attack")
     outIndex <- 11
   else if (outcome =="heart failure")  
@@ -11,15 +11,13 @@ rankall <- function (outcome, num="best"){
   else if (outcome == "pneumonia") 
     outIndex <- 23
   data[, outIndex] <- suppressWarnings(as.numeric(levels(data[, outIndex])[data[, outIndex]]))
-  data[, 2] <- as.character(data[, 2])
+  #data[, 2] <- as.character(data[, 2])
   states <- levels(data[,7])
-  states <- c("WY")
+   
   for (i in 1:length(states)){
     subsetState <- data[data$State==states[i],]
     subsetState <- subsetState[order(subsetState[,outIndex], subsetState[,2], na.last = NA),]
     subsetState <- subsetState[!subsetState[,outIndex] == "Not Available",]
-    print (subsetState[,outIndex])
-    print (subsetState[,2])
     if (num == "best")
       varHospital <- subsetState[1,2]
     else if (num == "worst")
